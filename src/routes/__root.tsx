@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
+import Footer from "~/components/footer";
 import Header from "~/components/header";
 import { NotFound } from "~/components/NotFound";
 import { Toaster } from "~/components/ui/sonner";
@@ -73,13 +74,14 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="flex min-h-full flex-col">
         <Header />
-        <main>{children}</main>
+        <main className="flex-1 py-10">{children}</main>
+        <Footer />
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
         <Toaster />

@@ -60,7 +60,7 @@ function SignInPage() {
 
   return (
     <>
-      <section className="page-container flex min-h-[calc(100dvh-(3.5rem+1px))] justify-center">
+      <section className="page-container flex min-h-[calc(100dvh-12rem-2px)] items-center justify-center">
         <div className="mx-auto flex max-w-md flex-col justify-center gap-6">
           <div className="flex flex-col items-center gap-2">
             <Link
