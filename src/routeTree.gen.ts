@@ -16,6 +16,7 @@ import { Route as SignInImport } from './routes/sign-in'
 import { Route as PrivacyImport } from './routes/privacy'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
+import { Route as AccountSettingsImport } from './routes/account.settings'
 
 // Create/Update Routes
 
@@ -46,6 +47,12 @@ const DashboardRoute = DashboardImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountSettingsRoute = AccountSettingsImport.update({
+  id: '/account/settings',
+  path: '/account/settings',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsImport
       parentRoute: typeof rootRoute
     }
+    '/account/settings': {
+      id: '/account/settings'
+      path: '/account/settings'
+      fullPath: '/account/settings'
+      preLoaderRoute: typeof AccountSettingsImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -99,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/sign-in': typeof SignInRoute
   '/terms': typeof TermsRoute
+  '/account/settings': typeof AccountSettingsRoute
 }
 
 export interface FileRoutesByTo {
@@ -107,6 +122,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/sign-in': typeof SignInRoute
   '/terms': typeof TermsRoute
+  '/account/settings': typeof AccountSettingsRoute
 }
 
 export interface FileRoutesById {
@@ -116,14 +132,34 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/sign-in': typeof SignInRoute
   '/terms': typeof TermsRoute
+  '/account/settings': typeof AccountSettingsRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/privacy' | '/sign-in' | '/terms'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/privacy'
+    | '/sign-in'
+    | '/terms'
+    | '/account/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/privacy' | '/sign-in' | '/terms'
-  id: '__root__' | '/' | '/dashboard' | '/privacy' | '/sign-in' | '/terms'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/privacy'
+    | '/sign-in'
+    | '/terms'
+    | '/account/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/privacy'
+    | '/sign-in'
+    | '/terms'
+    | '/account/settings'
   fileRoutesById: FileRoutesById
 }
 
@@ -133,6 +169,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   SignInRoute: typeof SignInRoute
   TermsRoute: typeof TermsRoute
+  AccountSettingsRoute: typeof AccountSettingsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -141,6 +178,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   SignInRoute: SignInRoute,
   TermsRoute: TermsRoute,
+  AccountSettingsRoute: AccountSettingsRoute,
 }
 
 export const routeTree = rootRoute
@@ -157,7 +195,8 @@ export const routeTree = rootRoute
         "/dashboard",
         "/privacy",
         "/sign-in",
-        "/terms"
+        "/terms",
+        "/account/settings"
       ]
     },
     "/": {
@@ -174,6 +213,9 @@ export const routeTree = rootRoute
     },
     "/terms": {
       "filePath": "terms.tsx"
+    },
+    "/account/settings": {
+      "filePath": "account.settings.tsx"
     }
   }
 }

@@ -34,11 +34,9 @@ function DashboardPage() {
 
   return (
     <>
-      <Header />
-
-      <main className="page-container">
+      <section className="page-container">
         <h1>{user.name || user.email}</h1>
-      </main>
+      </section>
     </>
   );
 }

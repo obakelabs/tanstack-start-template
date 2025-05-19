@@ -72,27 +72,25 @@ const Header = ({ className }: { className?: string }) => {
           </ul>
         </div>
 
-        <nav className="flex items-center space-x-4">
-          <div
-            className={cn(
-              "transition-all ease-in-out",
-              session.isPending ? "opacity-0" : "opacity-100",
-            )}
-          >
-            {session?.data?.user ? (
-              <UserDropdown user={session.data.user} />
-            ) : (
-              !session.isPending && (
-                <Link
-                  to="/sign-in"
-                  className={cn(buttonVariants(), "rounded-full")}
-                >
-                  Sign In
-                </Link>
-              )
-            )}
-          </div>
-        </nav>
+        <div
+          className={cn(
+            "flex transition-all ease-in-out",
+            session.isPending ? "opacity-0" : "opacity-100",
+          )}
+        >
+          {session?.data?.user ? (
+            <UserDropdown user={session.data.user} />
+          ) : (
+            !session.isPending && (
+              <Link
+                to="/sign-in"
+                className={cn(buttonVariants(), "rounded-full")}
+              >
+                Sign In
+              </Link>
+            )
+          )}
+        </div>
       </div>
     </header>
   );

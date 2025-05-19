@@ -66,11 +66,15 @@ function SignInPage() {
     },
   });
 
+  const signInWithGoogle = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
+  };
+
   return (
     <>
-      <Header />
-
-      <main className="page-container flex min-h-[calc(100dvh-(3.5rem+1px))] justify-center">
+      <section className="page-container flex min-h-[calc(100dvh-(3.5rem+1px))] justify-center">
         <div className="mx-auto flex max-w-md flex-col justify-center gap-6">
           <div className="flex flex-col items-center gap-2">
             <Link
@@ -119,9 +123,14 @@ function SignInPage() {
 
             <div>
               <form.Subscribe
-                children={() => (
-                  <Button className="w-full" type="submit">
-                    Sign In
+                selector={() => form.state.isSubmitting}
+                children={(isSubmitting) => (
+                  <Button
+                    className="w-full"
+                    disabled={isSubmitting}
+                    type="submit"
+                  >
+                    {isSubmitting ? "Signing in..." : "Sign In"}
                   </Button>
                 )}
               />
@@ -135,7 +144,11 @@ function SignInPage() {
           </div>
 
           <div>
-            <Button className="w-full" variant="outline">
+            <Button
+              onClick={signInWithGoogle}
+              className="w-full"
+              variant="outline"
+            >
               <GoogleIcon />
               Continue with Google
             </Button>
@@ -159,7 +172,7 @@ function SignInPage() {
             .
           </div>
         </div>
-      </main>
+      </section>
     </>
   );
 }
