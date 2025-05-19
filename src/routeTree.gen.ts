@@ -14,9 +14,10 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as TermsImport } from './routes/terms'
 import { Route as SignInImport } from './routes/sign-in'
 import { Route as PrivacyImport } from './routes/privacy'
-import { Route as DashboardImport } from './routes/dashboard'
+import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
-import { Route as AccountSettingsImport } from './routes/account.settings'
+import { Route as ProtectedDashboardImport } from './routes/_protected/dashboard'
+import { Route as ProtectedAccountSettingsImport } from './routes/_protected/account/settings'
 
 // Create/Update Routes
 
@@ -38,9 +39,8 @@ const PrivacyRoute = PrivacyImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardRoute = DashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const ProtectedRoute = ProtectedImport.update({
+  id: '/_protected',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -50,10 +50,16 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AccountSettingsRoute = AccountSettingsImport.update({
+const ProtectedDashboardRoute = ProtectedDashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+
+const ProtectedAccountSettingsRoute = ProtectedAccountSettingsImport.update({
   id: '/account/settings',
   path: '/account/settings',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => ProtectedRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -67,11 +73,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedImport
       parentRoute: typeof rootRoute
     }
     '/privacy': {
@@ -95,90 +101,115 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsImport
       parentRoute: typeof rootRoute
     }
-    '/account/settings': {
-      id: '/account/settings'
+    '/_protected/dashboard': {
+      id: '/_protected/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedDashboardImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/account/settings': {
+      id: '/_protected/account/settings'
       path: '/account/settings'
       fullPath: '/account/settings'
-      preLoaderRoute: typeof AccountSettingsImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof ProtectedAccountSettingsImport
+      parentRoute: typeof ProtectedImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface ProtectedRouteChildren {
+  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedAccountSettingsRoute: typeof ProtectedAccountSettingsRoute
+}
+
+const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedDashboardRoute: ProtectedDashboardRoute,
+  ProtectedAccountSettingsRoute: ProtectedAccountSettingsRoute,
+}
+
+const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
+  ProtectedRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '': typeof ProtectedRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/sign-in': typeof SignInRoute
   '/terms': typeof TermsRoute
-  '/account/settings': typeof AccountSettingsRoute
+  '/dashboard': typeof ProtectedDashboardRoute
+  '/account/settings': typeof ProtectedAccountSettingsRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '': typeof ProtectedRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/sign-in': typeof SignInRoute
   '/terms': typeof TermsRoute
-  '/account/settings': typeof AccountSettingsRoute
+  '/dashboard': typeof ProtectedDashboardRoute
+  '/account/settings': typeof ProtectedAccountSettingsRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/_protected': typeof ProtectedRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/sign-in': typeof SignInRoute
   '/terms': typeof TermsRoute
-  '/account/settings': typeof AccountSettingsRoute
+  '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/_protected/account/settings': typeof ProtectedAccountSettingsRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dashboard'
+    | ''
     | '/privacy'
     | '/sign-in'
     | '/terms'
+    | '/dashboard'
     | '/account/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard'
+    | ''
     | '/privacy'
     | '/sign-in'
     | '/terms'
+    | '/dashboard'
     | '/account/settings'
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
+    | '/_protected'
     | '/privacy'
     | '/sign-in'
     | '/terms'
-    | '/account/settings'
+    | '/_protected/dashboard'
+    | '/_protected/account/settings'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
+  ProtectedRoute: typeof ProtectedRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   SignInRoute: typeof SignInRoute
   TermsRoute: typeof TermsRoute
-  AccountSettingsRoute: typeof AccountSettingsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
+  ProtectedRoute: ProtectedRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
   SignInRoute: SignInRoute,
   TermsRoute: TermsRoute,
-  AccountSettingsRoute: AccountSettingsRoute,
 }
 
 export const routeTree = rootRoute
@@ -192,18 +223,21 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
+        "/_protected",
         "/privacy",
         "/sign-in",
-        "/terms",
-        "/account/settings"
+        "/terms"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/dashboard": {
-      "filePath": "dashboard.tsx"
+    "/_protected": {
+      "filePath": "_protected.tsx",
+      "children": [
+        "/_protected/dashboard",
+        "/_protected/account/settings"
+      ]
     },
     "/privacy": {
       "filePath": "privacy.tsx"
@@ -214,8 +248,13 @@ export const routeTree = rootRoute
     "/terms": {
       "filePath": "terms.tsx"
     },
-    "/account/settings": {
-      "filePath": "account.settings.tsx"
+    "/_protected/dashboard": {
+      "filePath": "_protected/dashboard.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/account/settings": {
+      "filePath": "_protected/account/settings.tsx",
+      "parent": "/_protected"
     }
   }
 }

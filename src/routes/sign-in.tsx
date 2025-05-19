@@ -1,44 +1,30 @@
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { getHeaders } from "@tanstack/react-start/server";
-import Header from "~/components/header";
 import { GoogleIcon } from "~/components/icons";
 import ObakeIndigoIcon from "~/components/logo/obake-indigo-icon";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { authClient } from "~/lib/auth-client";
+import { getSession } from "~/utils/session";
 import { toast } from "sonner";
 import { z } from "zod";
-
-const signInFormSchema = z.object({
-  email: z.string().email(),
-});
 
 export const Route = createFileRoute("/sign-in")({
   component: SignInPage,
   beforeLoad: async () => {
-    try {
-      const session = await authClient.getSession({
-        fetchOptions: {
-          headers: getHeaders() as HeadersInit,
-        },
-      });
+    const session = await getSession();
 
-      return { session: session.data };
-    } catch (error) {
-      console.error("Error fetching session in beforeLoad:", error);
-      // Return null session instead of failing the navigation
-      return { session: null };
-    }
-  },
-  loader: async ({ context }) => {
-    if (context?.session?.user) {
+    if (session?.user) {
       throw redirect({ to: "/dashboard" });
     }
 
-    return { session: null };
+    return { user: session?.user };
   },
+});
+
+const signInFormSchema = z.object({
+  email: z.string().email(),
 });
 
 function SignInPage() {
