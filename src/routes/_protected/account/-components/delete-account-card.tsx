@@ -10,12 +10,33 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { authClient } from "~/lib/auth-client";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const DeleteAccountCard = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleDelete = async () => {
-    await authClient.deleteUser({
-      callbackURL: "/",
-    });
+    try {
+      setIsDeleting(true);
+
+      await authClient.deleteUser({
+        callbackURL: "/",
+        fetchOptions: {
+          onSuccess() {
+            toast.success("Confirmation email sent, Please check your inbox!");
+          },
+          onError(error) {
+            console.error("Error sending confirmation email:", error);
+            toast.error("Error sending confirmation email. Please try again.");
+          },
+        },
+      });
+    } finally {
+      setIsDeleting(false);
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -31,7 +52,7 @@ const DeleteAccountCard = () => {
         </div>
 
         <div>
-          <Dialog>
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger
               className={buttonVariants({ variant: "destructive" })}
             >
@@ -54,10 +75,11 @@ const DeleteAccountCard = () => {
 
                 <Button
                   onClick={handleDelete}
+                  disabled={isDeleting}
                   variant="destructive"
                   type="button"
                 >
-                  Delete Account
+                  {isDeleting ? "Deleting Account..." : "Delete Account"}
                 </Button>
               </DialogFooter>
             </DialogContent>
