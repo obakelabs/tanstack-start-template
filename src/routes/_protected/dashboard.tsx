@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_protected/dashboard")({
 function DashboardPage() {
   return (
     <>
-      <section className="page-container py-12">
+      <section className="page-container">
         <h1>Dashboard</h1>
       </section>
     </>
