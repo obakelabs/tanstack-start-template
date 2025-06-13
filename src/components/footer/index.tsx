@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import IndigoLogo from "~/components/logo/indigo-logo";
+import { IndigoLogo, WhiteLogo } from "~/components/logo/obakelabs-logo";
 import { cn } from "~/lib/utils";
 
 const Footer = () => {
@@ -7,12 +7,23 @@ const Footer = () => {
     <footer className="mt-auto border-t">
       <div
         className={cn(
-          "page-container flex h-14 items-center justify-between bg-white",
+          "page-container bg-background flex h-14 items-center justify-between",
         )}
       >
         <div>
           <Link to="/">
-            <IndigoLogo />
+            <div
+              className="block dark:hidden"
+              aria-label="Obake Labs Indigo Logo"
+            >
+              <IndigoLogo className="h-8 w-auto" />
+            </div>
+            <div
+              className="hidden dark:block"
+              aria-label="Obake Labs White Logo"
+            >
+              <WhiteLogo className="h-8 w-auto" />
+            </div>
           </Link>
         </div>
         <div className="flex items-center gap-4">

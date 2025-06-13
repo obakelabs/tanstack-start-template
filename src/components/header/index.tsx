@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import IndigoLogo from "~/components/logo/indigo-logo";
+import { IndigoLogo, WhiteLogo } from "~/components/logo/obakelabs-logo";
 import { buttonVariants } from "~/components/ui/button";
 import { authClient } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
@@ -10,7 +10,7 @@ const Header = ({ className }: { className?: string }) => {
   const session = authClient.useSession();
 
   return (
-    <header className="sticky top-0 z-30 border-b bg-white">
+    <header className="bg-background sticky top-0 z-30 border-b">
       <div
         className={cn(
           "page-container flex h-14 items-center justify-between",
@@ -20,7 +20,18 @@ const Header = ({ className }: { className?: string }) => {
         <div className="flex items-center space-x-4">
           <div>
             <Link to="/">
-              <IndigoLogo />
+              <div
+                className="block dark:hidden"
+                aria-label="Obake Labs Indigo Logo"
+              >
+                <IndigoLogo className="h-8 w-auto" />
+              </div>
+              <div
+                className="hidden dark:block"
+                aria-label="Obake Labs White Logo"
+              >
+                <WhiteLogo className="h-8 w-auto" />
+              </div>
             </Link>
           </div>
 
