@@ -1,7 +1,10 @@
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { GoogleIcon } from "~/components/icons";
-import ObakeIndigoIcon from "~/components/logo/obake-indigo-icon";
+import {
+  ObakeIndigoIcon,
+  ObakeWhiteIcon,
+} from "~/components/logo/obakelabs-icon";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -67,7 +70,18 @@ function SignInPage() {
               to="/"
               className="flex flex-col items-center gap-2 font-medium"
             >
-              <ObakeIndigoIcon />
+              <div
+                className="block dark:hidden"
+                aria-label="Obake Labs Indigo Icon"
+              >
+                <ObakeIndigoIcon />
+              </div>
+              <div
+                className="hidden dark:block"
+                aria-label="Obake Labs White Icon"
+              >
+                <ObakeWhiteIcon />
+              </div>
               <span className="sr-only">Obake Labs Template</span>
             </Link>
 
