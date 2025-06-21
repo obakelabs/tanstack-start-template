@@ -9,20 +9,17 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { authClient } from "~/lib/auth-client";
-import { getSession } from "~/utils/session";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export const Route = createFileRoute("/sign-in")({
   component: SignInPage,
-  beforeLoad: async () => {
-    const session = await getSession();
-
-    if (session?.user) {
+  beforeLoad: async ({ context }) => {
+    if (context.user) {
       throw redirect({ to: "/dashboard" });
     }
 
-    return { user: session?.user };
+    return { user: context.user };
   },
 });
 

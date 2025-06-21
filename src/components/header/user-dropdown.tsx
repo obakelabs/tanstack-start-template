@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -110,11 +110,14 @@ function ThemeMenuItem() {
 }
 
 const UserDropdown = ({ user }: { user: TSessionUser }) => {
+  const router = useRouter();
+
   const handleSignOut = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
           toast.success("Signed Out Successfully");
+          router.invalidate();
         },
         onError: (error) => {
           console.error("Error signing out:", error);

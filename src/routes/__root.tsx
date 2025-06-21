@@ -13,9 +13,19 @@ import { NotFound } from "~/components/NotFound";
 import { Toaster } from "~/components/ui/sonner";
 import appCss from "~/styles/app.css?url";
 import { seo } from "~/utils/seo";
+import { getSession } from "~/utils/session";
 import * as React from "react";
 
 export const Route = createRootRoute({
+  beforeLoad: async () => {
+    const session = await getSession();
+
+    if (!session?.user) {
+      return { user: null };
+    }
+
+    return { user: session.user };
+  },
   head: () => ({
     meta: [
       {

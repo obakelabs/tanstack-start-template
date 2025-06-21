@@ -1,13 +1,12 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouteContext } from "@tanstack/react-router";
 import { IndigoLogo, WhiteLogo } from "~/components/logo/obakelabs-logo";
 import { buttonVariants } from "~/components/ui/button";
-import { authClient } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
 
 import UserDropdown from "./user-dropdown";
 
 const Header = ({ className }: { className?: string }) => {
-  const session = authClient.useSession();
+  const { user } = useRouteContext({ from: "__root__" });
 
   return (
     <header className="bg-background sticky top-0 z-30 border-b">
@@ -83,23 +82,16 @@ const Header = ({ className }: { className?: string }) => {
           </ul>
         </div>
 
-        <div
-          className={cn(
-            "flex transition-all ease-in-out",
-            session.isPending ? "opacity-0" : "opacity-100",
-          )}
-        >
-          {session?.data?.user ? (
-            <UserDropdown user={session.data.user} />
+        <div className={cn("flex transition-all ease-in-out")}>
+          {user ? (
+            <UserDropdown user={user} />
           ) : (
-            !session.isPending && (
-              <Link
-                to="/sign-in"
-                className={cn(buttonVariants(), "rounded-full")}
-              >
-                Sign In
-              </Link>
-            )
+            <Link
+              to="/sign-in"
+              className={cn(buttonVariants(), "rounded-full")}
+            >
+              Sign In
+            </Link>
           )}
         </div>
       </div>

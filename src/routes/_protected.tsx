@@ -1,16 +1,13 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { getSession } from "~/utils/session";
 
 export const Route = createFileRoute("/_protected")({
   component: ProtectedLayout,
-  beforeLoad: async () => {
-    const session = await getSession();
-
-    if (!session?.user) {
+  beforeLoad: async ({ context }) => {
+    if (!context.user) {
       throw redirect({ to: "/sign-in" });
     }
 
-    return { user: session?.user };
+    return { user: context.user };
   },
 });
 
